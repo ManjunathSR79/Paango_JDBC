@@ -31,7 +31,7 @@ public class Courses extends HttpServlet {
   
 	  
 	public Courses() {
-		System.out.println("Main");
+		 
  
  
  
