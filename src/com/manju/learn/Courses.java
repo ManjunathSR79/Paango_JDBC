@@ -58,7 +58,7 @@ pw.println("fghfg");*/
 		// TODO Auto-generated method stub
 		//doGet(request, response);
 		//doGet(request, response);
-		System.out.println("POST");
+		 
 		
 		PrintWriter pw = response.getWriter();
 
@@ -106,11 +106,10 @@ pw.println("fghfg");*/
 
 		
 		PrintWriter pw = response.getWriter();
-		  System.out.println("GET");
+		   
 	try {
 			  
-			System.out.println("GET11");
-			pw.println("main1");
+			 
 			String s= course.getAllCourses();
 		  
 			 
