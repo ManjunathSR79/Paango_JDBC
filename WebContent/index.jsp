@@ -18,19 +18,39 @@
  <script type="text/javascript"  > 
  
  var xhr = new XMLHttpRequest();
- xhr.onreadystatechange = function()
- {
-     if (xhr.readyState == 4)
-     {
+ xhr.onreadystatechange = function() {
+     if (xhr.readyState == 4) {
          var data = xhr.responseText;
-         document.getElementById("course").innerHTML =data;
+         var mycourses = JSON.parse(data);
+         var inputLine;
+         var len=mycourses.rows.length;
+          
+     	 //	document.getElementById("course").innerHTML ="hgjkvg";
+     	var tmp="";
+     	var i;
+     	var out=""
+     		out+='<table  border="1" style="width:100%"><tr><td>courseName</td><td>courseDescription</td><td>level</td><td>prerequisites</td><td>skillsAcquired</td><td>whoShouldDoThisCourse</td></tr>';
+          for( i=0;i<len ;i++)
+        	  {
+        	  Temp=mycourses.rows[i];
+        	//  out+='<tr><td>'+Temp.cname+'</td><td>'+Temp.cdesc+'</td><td>'+Temp.level+'</td><td>'+Temp.tarea1+'</td><td>'+Temp.tarea2+'</td><td>'+Temp.tarea3+'</td></tr>';
+        	 out+='<tr><td>'+Temp.courseName+'</td><td>'+Temp.courseDescription+'</td><td>'+Temp.level+'</td><td>'+Temp.prerequisites+'</td><td>'+Temp.skillsAcquired+'</td><td>'+Temp.whoShouldDoThisCourse+'</td></tr>';
+        	 
+        	  }
+        
+     out+='</table>';    
+   document.getElementById("course").innerHTML = out ;
+          
+        // alert(data );
+          
+        		  
      }
  }
  xhr.open('GET', 'Courses', true);
  xhr.send(null);
  
  </script>
- 
+
 
 </body>
 </html>
