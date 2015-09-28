@@ -13,18 +13,17 @@
 <input 	type="submit" value="Add Course">
 </form>
  
-
+<p id="course"></p>
  
- <script   > 
-
+ <script type="text/javascript"  > 
+ 
  var xhr = new XMLHttpRequest();
- xhr.onreadystatechange = function() {
-     if (xhr.readyState == 4) {
+ xhr.onreadystatechange = function()
+ {
+     if (xhr.readyState == 4)
+     {
          var data = xhr.responseText;
-        
-         alert(data );
-          
-        		  
+         document.getElementById("course").innerHTML =data;
      }
  }
  xhr.open('GET', 'Courses', true);
