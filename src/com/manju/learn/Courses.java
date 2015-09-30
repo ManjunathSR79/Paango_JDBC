@@ -26,20 +26,9 @@ public class Courses extends HttpServlet {
 	/**
 	 * Default constructor.
 	 */
-	CoursesDAO course=new CoursesDAO();
 
 	public Courses() {
-		System.out.println("Main");
- 
- 
- 
- 
- /*
-PrintWriter pw = response.getWriter();
-pw.println("fghfg");*/
-
-
-		// TODO Auto-generated constructor stub
+ // TODO Auto-generated constructor stub
 	}
   
 	/**
@@ -54,7 +43,6 @@ pw.println("fghfg");*/
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//doGet(request, response);
 		//doGet(request, response);
 		CoursesDAO course=new CoursesDAO();
 		
@@ -102,7 +90,7 @@ pw.println("fghfg");*/
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
  
-		
+		CoursesDAO course=new CoursesDAO();
 		PrintWriter pw = response.getWriter();
 	
 		 
@@ -110,9 +98,10 @@ pw.println("fghfg");*/
 			  
 			 
 			String s= course.getAllCourses();
-	
-			pw.println(s);	
-	
+		  
+				 
+				pw.println(s);	
+					
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -120,39 +109,7 @@ pw.println("fghfg");*/
 		
 		 
 		
-		/*
 		
-		  URL obj = new URL("http://localhost:5984/courses/_design/lms/_view/mycourses");
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-			con.setRequestMethod("GET");
-			con.setRequestProperty("Content-Type", "application/json");
-			con.setDoInput(true);
-			 
-			 	   
-			
-			BufferedReader in = new BufferedReader(new
-					InputStreamReader(con.getInputStream()));
-			
-			String inputLine;
-			String send="";
-		 
-		
-	 
-	  
-	 
-		pw.println("<TABLE>");
-		while ((inputLine = in.readLine()) != null) {
-		 pw.println("<TR>");
-		 pw.println("<TD>"+inputLine+"</TD>");
-		 pw.println("</TR>");
-			
-		 
-			  pw.println("<td>"+inputLine+"<td>");
-		 
-			 	} 
-			 
-		}
-		 
 	/** 
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
 	 */
