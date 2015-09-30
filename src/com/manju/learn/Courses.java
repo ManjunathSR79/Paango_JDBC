@@ -27,11 +27,9 @@ public class Courses extends HttpServlet {
 	 * Default constructor.
 	 */
 	CoursesDAO course=new CoursesDAO();
-	
-  
-	  
+
 	public Courses() {
-		 
+		System.out.println("Main");
  
  
  
@@ -58,7 +56,7 @@ pw.println("fghfg");*/
 		// TODO Auto-generated method stub
 		//doGet(request, response);
 		//doGet(request, response);
-		 
+		CoursesDAO course=new CoursesDAO();
 		
 		PrintWriter pw = response.getWriter();
 
@@ -72,7 +70,7 @@ pw.println("fghfg");*/
 		pw.println("<h2>What are the prerequisites?:</h2>" + request.getParameter("tarea2"));
 		pw.println("<h2>Skills acquired in this course </h2>" + request.getParameter("tarea3"));
 
-		// Below lines used to print a value in a console
+	/*	// Below lines used to print a value in a console
 		System.out.println("<h1>Course Name</h1>" +request.getParameter("cname"));
 		System.out.println("<h1>Course Description </h1>" +request.getParameter("cdesc"));
 		System.out.println("<h1>level</h1>" +request.getParameter("level"));
@@ -80,7 +78,7 @@ pw.println("fghfg");*/
 		System.out.println("<h2>What are the prerequisites?:</h2>"+request.getParameter("tarea2"));
 		System.out.println("<h2>Skills acquired in this course </h2>" +request.getParameter("tarea3"));
 
-		
+		*/
  
 		course.setCourseDescription(request.getParameter("cdesc"));
 		course.setCourseName(request.getParameter("cname"));
@@ -103,24 +101,18 @@ pw.println("fghfg");*/
 		
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-
+ 
 		
 		PrintWriter pw = response.getWriter();
-		   
+	
+		 
 	try {
 			  
 			 
 			String s= course.getAllCourses();
-		  
-			 
-				 
-				
-				pw.println(s);	
-			 
-		 
-			//pw.println(s);
-			 
-			 //pw.println(s);
+	
+			pw.println(s);	
+	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -161,20 +153,6 @@ pw.println("fghfg");*/
 			 
 		}
 		 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
- 
-
 	/** 
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
 	 */
