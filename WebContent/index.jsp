@@ -10,6 +10,7 @@
 <body >
 
 <form method="post" action="addcourse.jsp">
+
 <input 	type="submit" value="Add Course">
 </form>
  
@@ -29,7 +30,7 @@
          var tmp="";
      	 var i;
      	 var out=""
-     	 out+='<table  border="1" style="width:100%"><tr><td>courseName</td><td>courseDescription</td><td>level</td><td>prerequisites</td><td>skillsAcquired</td><td>whoShouldDoThisCourse</td></tr>';
+     	 out+='<table  border="1" style="width:100%"><tr><td><a href="editCourse.jsp">editCourse</tr><tr><td>courseName</td><td>courseDescription</td><td>level</td><td>prerequisites</td><td>skillsAcquired</td><td>whoShouldDoThisCourse</td></tr>';
          for( i=0;i<len ;i++)
         	{
         	 Temp=mycourses.rows[i].value;
