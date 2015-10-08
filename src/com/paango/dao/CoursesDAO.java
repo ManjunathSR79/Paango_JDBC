@@ -9,11 +9,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Map;
+ 
+
+ 
  
 public class CoursesDAO
 {
-	
+	 
 
 	public 	String courseDescription="";
 	public String courseName="";
@@ -87,7 +91,7 @@ private String packageAsJSON(String name, String value){
 	URL obj = new URL(url);
 	
 	
- 
+  
 	
 	HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 	//add request header
@@ -105,15 +109,13 @@ private String packageAsJSON(String name, String value){
 	System.out.println("Response Code : " + responseCode);
 	BufferedReader in = new BufferedReader(new
 	InputStreamReader(con.getInputStream())); 
-	String inputLine;
-	while ((inputLine = in.readLine()) != null) {
-	System.out.println(inputLine);
-	} 
+ 
 	in.close();
 	}
 	
 	
 	//private final static String USER_AGENT = "Mozilla/5.0";
+	 
 	
 	public  String getAllCourses() throws Exception {
 		
@@ -129,14 +131,40 @@ private String packageAsJSON(String name, String value){
 				InputStreamReader(con.getInputStream()));
 		
 		String inputLine;
-		String send="";
+		String send=" " ;
 		while ((inputLine = in.readLine()) != null) {
+			
 			 send+=inputLine;
+			 
 		} 
 		 
 		return send;
 	  
 	} 
+	public String getById(String id) throws Exception {
+		
+		
+		
+		
+		URL obj = new URL( id);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		con.setRequestMethod("GET");
+		con.setRequestProperty("Content-Type", "application/json");
+		con.setDoInput(true);
+		BufferedReader in = new BufferedReader(new
+				InputStreamReader(con.getInputStream()));
+		
+		String inputLine;
+		String send=" " ;
+		while ((inputLine = in.readLine()) != null) {
+			
+			 send+=inputLine;
+			 
+		} 
+		 
+		return send;
+		
+	}
 	
 } 
 	
