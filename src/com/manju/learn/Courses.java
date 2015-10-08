@@ -1,6 +1,8 @@
 package com.manju.learn;
  
+ 
 import com.paango.dao.CoursesDAO;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -77,8 +79,9 @@ public class Courses extends HttpServlet {
 		
 		course.insert("http://localhost:5984/courses");
 		
-		
-		doGet(request, response);
+		RequestDispatcher dispatcher=request.getRequestDispatcher("/index.jsp");
+		dispatcher.forward(request, response);
+	 
 		
 	}
 	
