@@ -50,8 +50,7 @@ color:red;
  <input type="submit" name="submit">
  
  
- <jsp:useBean id="link" class="com.paango.dao.CoursesDAO" /> 
- <%=link.getById("http://localhost:5984/courses/_design/lms/_view/mycourses") %>
+ 
 
   </form>
  
