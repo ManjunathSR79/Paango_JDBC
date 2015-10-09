@@ -50,9 +50,22 @@ color:red;
   <br />
    <br>
  
-   <input type="hidden" name="id" value="dfgdfgdf">  
+   <input type="hidden" name="id" value="/">  
 
  <input type="submit" name="submit">
+ 
+
+<jsp:useBean id="link" class="com.paango.dao.CoursesDAO"></jsp:useBean>
+  <%
+  String x;
+  String hidden = request.getParameter("id"); 
+  
+  x=link.getById(hidden); 
+     %>  
+ The Hidden Value is <%=hidden%>
+ 
+  Result is   <%=x %>
+ 
 
   </form>
  
