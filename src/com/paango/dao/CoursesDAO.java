@@ -1,4 +1,5 @@
 package com.paango.dao;
+ 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,6 +12,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
+ 
  
 
  
@@ -141,12 +143,13 @@ private String packageAsJSON(String name, String value){
 		return send;
 	  
 	} 
+	
 	public String getById(String id) throws Exception {
 		
 		
 		
 		
-		URL obj = new URL( id);
+		URL obj = new URL("http://localhost:5984/courses/"+id);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("GET");
 		con.setRequestProperty("Content-Type", "application/json");
@@ -161,8 +164,9 @@ private String packageAsJSON(String name, String value){
 			 send+=inputLine;
 			 
 		} 
-		 
-		return send;
+		
+	 
+		 return send;
 		
 	}
 	
