@@ -46,30 +46,22 @@ public class Courses extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
+		
+		String s=request.getParameter("type");
+		
+		String x=request.getParameter("hidden");
+		if(x!=null)            // OR if(s!="add")
+		{
+		 
+			doPut(request, response);
+		}
+		else
+		{             
+		
 		CoursesDAO course=new CoursesDAO();
 		
-		PrintWriter pw = response.getWriter();
+		//PrintWriter pw = response.getWriter();
 
-		// Below lines used to print a value in a Apache browser or in a browser
-		pw.println("<h1>Course Name</h1>" + request.getParameter("cname"));
-		pw.println("<h1>Course Description </h1>" + request.getParameter("cdesc"));
-		
-		pw.println("<h1>level</h1>" + request.getParameter("level"));
-		
-		pw.println("<h2>Who should do this course?:</h2>" + request.getParameter("tarea1"));
-		pw.println("<h2>What are the prerequisites?:</h2>" + request.getParameter("tarea2"));
-		pw.println("<h2>Skills acquired in this course </h2>" + request.getParameter("tarea3"));
-
-	/*	// Below lines used to print a value in a console
-		System.out.println("<h1>Course Name</h1>" +request.getParameter("cname"));
-		System.out.println("<h1>Course Description </h1>" +request.getParameter("cdesc"));
-		System.out.println("<h1>level</h1>" +request.getParameter("level"));
-		System.out.println("<h2>Who should do this course?:</h2>" +request.getParameter("tarea1"));
-		System.out.println("<h2>What are the prerequisites?:</h2>"+request.getParameter("tarea2"));
-		System.out.println("<h2>Skills acquired in this course </h2>" +request.getParameter("tarea3"));
-
-		*/
- 
 		course.setCourseDescription(request.getParameter("cdesc"));
 		course.setCourseName(request.getParameter("cname"));
 		course.setLevel(request.getParameter("level"));
@@ -82,7 +74,7 @@ public class Courses extends HttpServlet {
 		RequestDispatcher dispatcher=request.getRequestDispatcher("/index.jsp");
 		dispatcher.forward(request, response);
 	 
-		
+		}
 	}
 	
 	 
@@ -95,14 +87,10 @@ public class Courses extends HttpServlet {
  
 		CoursesDAO course=new CoursesDAO();
 		PrintWriter pw = response.getWriter();
-	
-		 
-	try {
+		try {
 			  
-			 
-			String s= course.getAllCourses();
+				String s= course.getAllCourses();
 		  
-				 
 				pw.println(s);	
 					
 		} catch (Exception e) {
@@ -119,6 +107,30 @@ public class Courses extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
+		
+ 
+	 
+		
+		CoursesDAO course=new CoursesDAO();
+		course.setCourseDescription(request.getParameter("cdesc"));
+		course.setCourseName(request.getParameter("cname"));
+		course.setLevel(request.getParameter("level"));
+		course.setPrerequisites(request.getParameter("tarea2"));
+		course.setSkillsAcquired(request.getParameter("tarea3"));
+		course.setWhoShouldDoThisCourse(request.getParameter("tarea1"));
+		String s=request.getParameter("hidden");
+		String s1=request.getParameter("revision");
+	 
+		course.setId(s);
+		course.setRev(s1);
+		
+		course.update("http://localhost:5984/courses");
+		
+		RequestDispatcher dispatcher=request.getRequestDispatcher("/index.jsp");
+		dispatcher.forward(request, response);
+	 
+		
 	}
 
 	/**
@@ -130,4 +142,3 @@ public class Courses extends HttpServlet {
 	}
 
 }
- 
