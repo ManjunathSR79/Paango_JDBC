@@ -19,7 +19,7 @@ color:red;
 </head>
 <body>
 
- <form name="addcourse" method="POST" action="Courses">
+ <form name="addcourse" method="post" action="Courses">
 
 <h1>Course Name<span>*</span>:</h1>
 <input  type="text" name="cname" id="cname" required>
@@ -52,11 +52,13 @@ color:red;
   <br />
    <br>
  
-   <input type="hidden" name="id" id="id" value="/">  
-
- <input type="submit" name="submit">
+   <input type="hidden" name="hidden" id="hidden" value='<%=request.getParameter("id")%>' />
+  <input type="hidden" name="revision" id="revision" value='<%=request.getParameter("rev")%>'  />
+  <input type="hidden" name="type" value="update">
+ <input type="submit" value="Update Course">
  
  <p id="course"></p>
+ </form>
  
 <jsp:useBean id="link" class="com.paango.dao.CoursesDAO"></jsp:useBean>
   <%
@@ -64,18 +66,18 @@ color:red;
   String hidden=request.getParameter("id"); 
   x=link.getById(hidden); 
   %>
+   
   
   <script type="text/javascript">
-  var xx='<%=x%>';
- 
-          var  mycourses = JSON.parse(xx);
+      var xx='<%=x%>';
+      var  mycourses = JSON.parse(xx);
              document.getElementById("cname").value = mycourses.courseName;
              document.getElementById("cdesc").value = mycourses.courseDescription;
              document.getElementById("level").value = mycourses.level;
-             document.getElementById("tarea1").value = mycourses.prerequisites;
-             document.getElementById("tarea2").value = mycourses.skillsAcquired;
-             document.getElementById("tarea3").value = mycourses.whoShouldDoThisCourse;
-   
+             document.getElementById("tarea2").value = mycourses.prerequisites;
+             document.getElementById("tarea3").value = mycourses.skillsAcquired;
+             document.getElementById("tarea1").value = mycourses.whoShouldDoThisCourse;
+    
   </script>
  	
  </body>
