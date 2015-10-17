@@ -12,11 +12,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
- 
- 
-
- 
- 
+  
 public class CoursesDAO
 {
 	 
@@ -27,14 +23,25 @@ public class CoursesDAO
 	public String prerequisites="";
 	public String skillsAcquired="";
 	public String whoShouldDoThisCourse="";
-
-     public   String url1;
-     
-     
-
+	public String id="";
+	public String rev="";
+	
+	public String getId() {
+		return id;
+		} 
+	public void setId(String id) {
+		this.id = id;
+		}
+	public String getRev() {
+		return rev;
+		} 
+	public void setRev(String rev) {
+		this.rev = rev;
+		}
 public String getCourseDescription() {
 return courseDescription;
 } 
+
 public void setCourseDescription(String courseDescription) {
 this.courseDescription = courseDescription;
 }
@@ -91,10 +98,6 @@ private String packageAsJSON(String name, String value){
 	+ packageAsJSON("whoShouldDoThisCourse", whoShouldDoThisCourse)
 	+ "}" ; 
 	URL obj = new URL(url);
-	
-	
-  
-	
 	HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 	//add request header
 	con.setRequestMethod("POST");
@@ -103,21 +106,51 @@ private String packageAsJSON(String name, String value){
 	con.setDoOutput(true);
 	DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 	wr.writeBytes(json);
+	 
 	wr.flush();
 	wr.close();
 	int responseCode = con.getResponseCode();
 	System.out.println("\nSending 'POST' request to URL : " + url);
 	System.out.println("Post parameters : " + json);
 	System.out.println("Response Code : " + responseCode);
-	BufferedReader in = new BufferedReader(new
-	InputStreamReader(con.getInputStream())); 
- 
-	in.close();
 	}
-	
 	
 	//private final static String USER_AGENT = "Mozilla/5.0";
 	 
+	
+	
+	public void update(String url) throws MalformedURLException, IOException,
+	ProtocolException { 
+		
+		 
+		String json = "{"+ packageAsJSON("_id",id ) + ", "+ packageAsJSON("_rev",rev ) + ", " + packageAsJSON("courseName",courseName ) + ", "
+				+ packageAsJSON("courseDescription", courseDescription) + ", "
+				+ packageAsJSON("level", level) + ", "
+				+ packageAsJSON("prerequisites", prerequisites) + ", "
+				+ packageAsJSON("skillsAcquired", skillsAcquired) + ", "
+				+ packageAsJSON("whoShouldDoThisCourse", whoShouldDoThisCourse)
+				+ "}" ; 
+				URL obj = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+				//add request header
+				con.setRequestMethod("POST");// if i set request method into "PUT" , Precondition Failed will occur  here what should i do..
+				con.setRequestProperty("Content-Type", "application/json");
+		 
+				
+				con.setDoOutput(true); 
+				DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+				wr.writeBytes(json);
+				 
+				wr.flush();
+				wr.close();
+				int responseCode = con.getResponseCode();
+				String status=con.getResponseMessage();
+				System.out.println("\nSending 'POST' request to URL : " + url);
+				System.out.println("\nStatus : " +status);
+				System.out.println("Post parameters : " + json);
+				System.out.println("Response Code : " + responseCode);
+		
+			}
 	
 	public  String getAllCourses() throws Exception {
 		
@@ -126,18 +159,12 @@ private String packageAsJSON(String name, String value){
 		con.setRequestMethod("GET");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setDoInput(true);
-		 
-		 	   
-		 
 		BufferedReader in = new BufferedReader(new
-				InputStreamReader(con.getInputStream()));
-		
+		InputStreamReader(con.getInputStream()));
 		String inputLine;
 		String send=" " ;
 		while ((inputLine = in.readLine()) != null) {
-			
 			 send+=inputLine;
-			 
 		} 
 		 
 		return send;
@@ -145,30 +172,19 @@ private String packageAsJSON(String name, String value){
 	} 
 	
 	public String getById(String id) throws Exception {
-		
-		
-		
-		
 		URL obj = new URL("http://localhost:5984/courses/"+id);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("GET");
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setDoInput(true);
 		BufferedReader in = new BufferedReader(new
-				InputStreamReader(con.getInputStream()));
-		
+		InputStreamReader(con.getInputStream()));
 		String inputLine;
 		String send=" " ;
 		while ((inputLine = in.readLine()) != null) {
-			
 			 send+=inputLine;
-			 
 		} 
-		
-	 
 		 return send;
-		
 	}
-	
 } 
 	
