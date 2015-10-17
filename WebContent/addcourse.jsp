@@ -47,9 +47,13 @@ color:red;
  <br />
   <br />
    <br>
-  
- <input type="submit" name="submit">
-  
+ <input type="hidden" name="type" value="add">
+ <input type="submit" value="Add Course">
+ 
+ 
+ 
+
+
   </form>
  
 		
