@@ -25,7 +25,7 @@ public class CoursesDAO
 	public String whoShouldDoThisCourse="";
 	public String id="";
 	public String rev="";
-	
+	  
 	public String getId() {
 		return id;
 		} 
@@ -156,7 +156,7 @@ private String packageAsJSON(String name, String value){
 		
 	 	URL obj = new URL("http://localhost:5984/courses/_design/lms/_view/mycourses");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setRequestMethod("GET");
+		con.setRequestMethod("GET"); 
 		con.setRequestProperty("Content-Type", "application/json");
 		con.setDoInput(true);
 		BufferedReader in = new BufferedReader(new
@@ -186,5 +186,39 @@ private String packageAsJSON(String name, String value){
 		} 
 		 return send;
 	}
+	
+	
+	
+	public void delete(String url) throws MalformedURLException, IOException,
+	ProtocolException {
+		
+		
+		String json = "{  }" ;  
+				URL obj = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+				//add request header
+				con.setRequestMethod("DELETE");
+			 
+				 
+				con.setRequestProperty("Content-Type", "application/json");
+		 
+				
+				con.setDoOutput(true); 
+				DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+				 wr.writeBytes(json);
+				 				 
+				wr.flush();
+				wr.close();
+				int responseCode = con.getResponseCode();
+				String status=con.getResponseMessage();
+				System.out.println("\nSending 'POST' request to URL : " + url);
+				System.out.println("\nStatus : " +status);
+				System.out.println("Post parameters : " + json);
+				System.out.println("Response Code : " + responseCode);
+		
+	}
+	
+	
+ 
 } 
 	
