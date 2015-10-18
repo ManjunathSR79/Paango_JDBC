@@ -30,13 +30,13 @@
          var tmp="";
      	 var i;
      	 var out="";
-     	 out+='<table  border="1" style="width:100%"><tr><td>Edit</td><td>courseName</td><td>courseDescription</td><td>level</td><td>whoShouldDoThisCourse</td><td>prerequisites</td><td>skillsAcquired</td></tr>';
+     	 out+='<table  border="1" style="width:100%"><tr><td>Edit</td><td>Delete</td><td>courseName</td><td>courseDescription</td><td>level</td><td>whoShouldDoThisCourse</td><td>prerequisites</td><td>skillsAcquired</td></tr>';
          for( i=0;i<len ;i++)
         	{
         	 Temp=mycourses.rows[i].value;
         	 var t=Temp._id;
         	 var r=Temp._rev;
-        	 out+='<tr><td><a href="editCourse.jsp?id='+t+'&rev='+r+' ">edit</td><td>'   +Temp.courseName+'</td><td>'+Temp.courseDescription+'</td><td>'+Temp.level+'</td><td>'+Temp.whoShouldDoThisCourse+'</td><td>'+Temp.prerequisites+'</td><td>'+Temp.skillsAcquired+'</td></tr>';
+        	 out+='<tr><td><a href="editCourse.jsp?id='+t+'&rev='+r+' ">Edit</td> <td><a href="delete.jsp?id='+t+'&rev='+r+' ">Delete</td><td>'   +Temp.courseName+'</td><td>'+Temp.courseDescription+'</td><td>'+Temp.level+'</td><td>'+Temp.whoShouldDoThisCourse+'</td><td>'+Temp.prerequisites+'</td><td>'+Temp.skillsAcquired+'</td></tr>';
         	}
             out+='</table>';    
             document.getElementById("course").innerHTML = out;
