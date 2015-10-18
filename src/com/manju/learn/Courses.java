@@ -47,17 +47,15 @@ public class Courses extends HttpServlet {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
 		
-		String s=request.getParameter("type");
-		
-		String x=request.getParameter("hidden");
-		if(x!=null)            // OR if(s!="add")
-		{
+		String s=(String)request.getParameter("type");
 		 
-			doPut(request, response);
-		}
-		else
-		{             
-		
+		String x=request.getParameter("hidden");
+	 switch(s)
+	 {
+	 case "A" :
+	 
+		             
+			  
 		CoursesDAO course=new CoursesDAO();
 		
 		//PrintWriter pw = response.getWriter();
@@ -74,7 +72,16 @@ public class Courses extends HttpServlet {
 		RequestDispatcher dispatcher=request.getRequestDispatcher("/index.jsp");
 		dispatcher.forward(request, response);
 	 
-		}
+		break;
+	 case "E" :
+			doPut(request, response);
+		
+	break;
+	 case "D" :
+		
+			 
+			doDelete(request, response);
+	 }
 	}
 	
 	 
@@ -107,7 +114,7 @@ public class Courses extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+	 
 		
  
 	 
@@ -139,6 +146,18 @@ public class Courses extends HttpServlet {
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
+		
+		CoursesDAO course=new CoursesDAO();
+		String s=request.getParameter("hidden");
+		String s1=request.getParameter("revision");
+		course.setId(s);
+		course.setRev(s1);
+		
+		course.delete("http://localhost:5984/courses/"+s+"?rev="+s1);
+		
+		RequestDispatcher dispatcher=request.getRequestDispatcher("/index.jsp");
+		dispatcher.forward(request, response);
 	}
 
 }
