@@ -19,7 +19,7 @@ color:red;
 </head>
 <body>
 
- <form name="addcourse" method="post" action="Courses">
+ <form name="Editcourse" method="post" action="Courses">
 
 <h1>Course Name<span>*</span>:</h1>
 <input  type="text" name="cname" id="cname" required>
@@ -54,7 +54,7 @@ color:red;
  
    <input type="hidden" name="hidden" id="hidden" value='<%=request.getParameter("id")%>' />
   <input type="hidden" name="revision" id="revision" value='<%=request.getParameter("rev")%>'  />
-  <input type="hidden" name="type" value="update">
+  <input type="hidden" name="type" value="E">
  <input type="submit" value="Update Course">
  
  <p id="course"></p>
