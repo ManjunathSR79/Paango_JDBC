@@ -1,5 +1,9 @@
 package com.paango.dao;
  
+
+import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,7 +15,19 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
+
+
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.Map;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import com.sun.corba.se.pept.transport.*;
+import com.sun.corba.se.pept.transport.*;
+
   
 public class CoursesDAO
 {
@@ -23,8 +39,8 @@ public class CoursesDAO
 	public String prerequisites="";
 	public String skillsAcquired="";
 	public String whoShouldDoThisCourse="";
-	public String id="";
-	public String rev="";
+	public String id;
+	 
 	  
 	public String getId() {
 		return id;
@@ -32,12 +48,7 @@ public class CoursesDAO
 	public void setId(String id) {
 		this.id = id;
 		}
-	public String getRev() {
-		return rev;
-		} 
-	public void setRev(String rev) {
-		this.rev = rev;
-		}
+	 
 public String getCourseDescription() {
 return courseDescription;
 } 
@@ -79,40 +90,45 @@ this.whoShouldDoThisCourse = whoShouldDoThisCourse;
 
 
 
-private String packageAsJSON(String name, String value){
-	//Check if the value field has a double quote in it
-	//Replace the double quotes with single quotes to avoid
-	//Wrong formatting of the json string
-	String value1 = value.replace("\"", "'");
-	return "\"" + name + "\":\"" + value1 + "\"";
-	}
-
+ 
 	public void insert(String url) throws MalformedURLException, IOException,
 	ProtocolException {
-	//create JSON
-	String json = "{" + packageAsJSON("courseName", courseName) + ", "
-	+ packageAsJSON("courseDescription", courseDescription) + ", "
-	+ packageAsJSON("level", level) + ", "
-	+ packageAsJSON("prerequisites", prerequisites) + ", "
-	+ packageAsJSON("skillsAcquired", skillsAcquired) + ", "
-	+ packageAsJSON("whoShouldDoThisCourse", whoShouldDoThisCourse)
-	+ "}" ; 
-	URL obj = new URL(url);
-	HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-	//add request header
-	con.setRequestMethod("POST");
-	con.setRequestProperty("Content-Type", "application/json");
+		 
+		 final String user = "root";
+		 final String psword = "123";
+				 
+	Connection c=null; 
+	Statement p = null;
+	 try {
+		 Class.forName("com.mysql.jdbc.Driver");
+		  int u=0;
+	     c=DriverManager.getConnection(url,user,psword);
+	   	 p=c.createStatement();
+		  String q="INSERT INTO courses VALUES('" + id+"','"+courseName+"','"+courseDescription+"','"+level+"','"+whoShouldDoThisCourse+"','"+prerequisites+"','"+skillsAcquired+"')";
+		 u=p.executeUpdate(q);
+		 if(u!=0)
+		 {
+			 System.out.println("sucessfully added");
+		 }
+	 }
+	 catch(Exception e)
+	 {
+		 System.out.println(" unable to connect");
+		
+	 }
+	 finally
+	 {
+		 try {
+			p.close();
+		
+			c.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 	 
-	con.setDoOutput(true);
-	DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-	wr.writeBytes(json);
-	 
-	wr.flush();
-	wr.close();
-	int responseCode = con.getResponseCode();
-	System.out.println("\nSending 'POST' request to URL : " + url);
-	System.out.println("Post parameters : " + json);
-	System.out.println("Response Code : " + responseCode);
+			e.printStackTrace();
+		}
+	 }
+	  
 	}
 	
 	//private final static String USER_AGENT = "Mozilla/5.0";
@@ -122,103 +138,224 @@ private String packageAsJSON(String name, String value){
 	public void update(String url) throws MalformedURLException, IOException,
 	ProtocolException { 
 		
-		 
-		String json = "{"+ packageAsJSON("_id",id ) + ", "+ packageAsJSON("_rev",rev ) + ", " + packageAsJSON("courseName",courseName ) + ", "
-				+ packageAsJSON("courseDescription", courseDescription) + ", "
-				+ packageAsJSON("level", level) + ", "
-				+ packageAsJSON("prerequisites", prerequisites) + ", "
-				+ packageAsJSON("skillsAcquired", skillsAcquired) + ", "
-				+ packageAsJSON("whoShouldDoThisCourse", whoShouldDoThisCourse)
-				+ "}" ; 
-				URL obj = new URL(url);
-				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-				//add request header
-				con.setRequestMethod("POST");// if i set request method into "PUT" , Precondition Failed will occur  here what should i do..
-				con.setRequestProperty("Content-Type", "application/json");
-		 
-				
-				con.setDoOutput(true); 
-				DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-				wr.writeBytes(json);
+
+		 final String user = "root";
+		 final String psword = "123";
 				 
-				wr.flush();
-				wr.close();
-				int responseCode = con.getResponseCode();
-				String status=con.getResponseMessage();
-				System.out.println("\nSending 'POST' request to URL : " + url);
-				System.out.println("\nStatus : " +status);
-				System.out.println("Post parameters : " + json);
-				System.out.println("Response Code : " + responseCode);
+	Connection c=null; 
+	Statement p = null;
+	 try {
+		 Class.forName("com.mysql.jdbc.Driver");
 		
-			}
+	   
+	  c=DriverManager.getConnection(url,user,psword);
 	
-	public  String getAllCourses() throws Exception {
+	 		 p=c.createStatement();
+	 		// String q="UPDATE courses "+ "SET "+"course_name ='aaaaaaa'  WHERE id=1";
+			String q="UPDATE courses "+ "SET course_name = '"+courseName+"',course_description ='"+courseDescription+"' ,level='"+level+"',who_should_do_this_course='"+whoShouldDoThisCourse+"',prerequisites='"+prerequisites+"',skills_aquired='"+skillsAcquired+"' WHERE id='" + id+"'" ;
+			 
 		
-	 	URL obj = new URL("http://localhost:5984/courses/_design/lms/_view/mycourses");
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setRequestMethod("GET"); 
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setDoInput(true);
-		BufferedReader in = new BufferedReader(new
-		InputStreamReader(con.getInputStream()));
-		String inputLine;
-		String send=" " ;
-		while ((inputLine = in.readLine()) != null) {
-			 send+=inputLine;
-		} 
+							 
+			 p.execute(q);
+			
+			
+		
+	 }
+	 catch(Exception e)
+	 {
+		 System.out.println(" unable to connect Database "+e);
+		
+	 }
+	 finally
+	 {
+		 try {
+			p.close();
+		
+			c.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			  
+			e.printStackTrace();
+		}
+	 }
+	}
+
+
+	
+	
+	
+	
+	
+	
+	public  void getAllCourses() throws Exception {
+		final String user = "root";
+		 final String psword = "123";
+		Connection c=null; 
+		Statement p = null;
+	 	
+	 	try {
+		
+			 
+			Class.forName("com.mysql.jdbc.Driver");
+			String url= "jdbc:mysql://localhost:3306/paango?autoReconnect=true";
+			 
+		  int u=0;
+		   
+		  c=DriverManager.getConnection(url,user,psword);
+			 p=c.createStatement();
+			 String s="select * from courses";
+			 ResultSet rs=p.executeQuery(s);
+			 
+			 
+			 while(rs.next())
+			 {
+				 System.out.println("id   "+rs.getString("id")+"Cname "+rs.getString("course_name"));//so on
+			 }
 		 
-		return send;
+		}  catch(Exception e)
+		 {
+			 System.out.println(" unable to connect");
+			
+		 }
+		 finally
+		 {
+			 try {
+				p.close();
+			
+				c.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				 System.out.println(" unable catch "+e);
+				e.printStackTrace();
+			}
+		 }
+		 
+	 
 	  
 	} 
 	
-	public String getById(String id) throws Exception {
-		URL obj = new URL("http://localhost:5984/courses/"+id);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setRequestMethod("GET");
-		con.setRequestProperty("Content-Type", "application/json");
-		con.setDoInput(true);
-		BufferedReader in = new BufferedReader(new
-		InputStreamReader(con.getInputStream()));
-		String inputLine;
-		String send=" " ;
-		while ((inputLine = in.readLine()) != null) {
-			 send+=inputLine;
-		} 
-		 return send;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public void getById(String id) throws Exception {
+		final String user = "root";
+		 final String psword = "123";
+		Connection c=null; 
+		Statement p = null;
+		 String send="";
+	 	try {
+		
+			 
+			Class.forName("com.mysql.jdbc.Driver");
+			String url= "jdbc:mysql://localhost:3306/paango?autoReconnect=true";
+			 
+		     int u=0;
+		   
+		     c=DriverManager.getConnection(url,user,psword);
+			 p=c.createStatement();
+			 
+			 String s="select * from courses where id="+id;
+			
+			 ResultSet rs=p.executeQuery(s);
+			
+			 while(rs.next())
+			 {
+				
+					 
+				    setId(rs.getString("id"));
+				    setCourseDescription(rs.getString("course_description"));
+				    setCourseName(rs.getString("course_name"));
+				    setLevel(rs.getString("level"));
+				    setPrerequisites(rs.getString("prerequisites"));
+				    setSkillsAcquired(rs.getString("skills_aquired"));
+				    setWhoShouldDoThisCourse(rs.getString("who_should_do_this_course"));
+			 }
+			 }
+			 catch(Exception e)
+			 {
+				 System.out.println(" unable to connect");
+				
+			 }
+			 finally
+			 {
+				 try {
+					p.close();
+				
+					c.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					 System.out.println(" unable catch "+e);
+					e.printStackTrace();
+				}
+			 }
+	 	
+	 	
+	 	
 	}
+
 	
 	
 	
-	public void delete(String url) throws MalformedURLException, IOException,
+	
+	
+	
+	public void delete() throws MalformedURLException, IOException,
 	ProtocolException {
 		
 		
-		String json = "{  }" ;  
-				URL obj = new URL(url);
-				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-				//add request header
-				con.setRequestMethod("DELETE");
-			 
-				 
-				con.setRequestProperty("Content-Type", "application/json");
 		 
-				
-				con.setDoOutput(true); 
-				DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-				 wr.writeBytes(json);
-				 				 
-				wr.flush();
-				wr.close();
-				int responseCode = con.getResponseCode();
-				String status=con.getResponseMessage();
-				System.out.println("\nSending 'POST' request to URL : " + url);
-				System.out.println("\nStatus : " +status);
-				System.out.println("Post parameters : " + json);
-				System.out.println("Response Code : " + responseCode);
+		 final String user = "root";
+		 final String psword = "123";
+				 
+	Connection c=null; 
+	Statement p = null;
+	 try {
+		 Class.forName("com.mysql.jdbc.Driver");
 		
-	}
-	
+	   
+	  c=DriverManager.getConnection( "jdbc:mysql://localhost:3306/paango?autoReconnect=true",user,psword);
+	 
+	 		 p=c.createStatement();
+	 		// String q="UPDATE courses "+ "SET "+"course_name ='aaaaaaa'  WHERE id=1";
+			//String q="DELETE FROM courses "+ "WHERE id='+id+'" ;
+	 		 
+	 		String q="DELETE FROM courses  WHERE id='" + id+"'" ;
+			 
+			 		 
+			 p.executeUpdate(q);
+			 	 
+			
+	 }
+	 catch(Exception e)
+	 {
+		 System.out.println(" unable to connect Database "+e);
+		
+	 }
+	 finally
+	 {
+		 try {
+			p.close();
+		
+			c.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			  
+			e.printStackTrace();
+		}
+	 }
 	
  
-} 
+} }
 	
