@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ page import="java.sql.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -9,41 +10,64 @@
 </head>
 <body >
 
-<form method="post" action="addcourse.jsp">
+<form method="post" action="values.jsp">
+<input type ="text" name="id">
+<input type="submit" value="Search by ID">
 
+</br>
+</br>
+</form>
+<form method="post" action="addcourse.jsp">
 <input 	type="submit" value="Add Course">
 </form>
- 
-<p id="course"></p>
- 
- <script type="text/javascript"  > 
- 
- var xhr = new XMLHttpRequest();
- xhr.onreadystatechange = function()
- {
-     if (xhr.readyState == 4)
-     {
-    	 var data = xhr.responseText;
-         var  mycourses = JSON.parse(data);
-         var inputLine;
-         var len=mycourses.rows.length;
-         var tmp="";
-     	 var i;
-     	 var out="";
-     	 out+='<table  border="1" style="width:100%"><tr><td>Edit</td><td>Delete</td><td>courseName</td><td>courseDescription</td><td>level</td><td>whoShouldDoThisCourse</td><td>prerequisites</td><td>skillsAcquired</td></tr>';
-         for( i=0;i<len ;i++)
-        	{
-        	 Temp=mycourses.rows[i].value;
-        	 var t=Temp._id;
-        	 var r=Temp._rev;
-        	 out+='<tr><td><a href="editCourse.jsp?id='+t+'&rev='+r+' ">Edit</td> <td><a href="delete.jsp?id='+t+'&rev='+r+' ">Delete</td><td>'   +Temp.courseName+'</td><td>'+Temp.courseDescription+'</td><td>'+Temp.level+'</td><td>'+Temp.whoShouldDoThisCourse+'</td><td>'+Temp.prerequisites+'</td><td>'+Temp.skillsAcquired+'</td></tr>';
-        	}
-            out+='</table>';    
-            document.getElementById("course").innerHTML = out;
-   	 }
- }
- xhr.open('GET', 'Courses', true);
- xhr.send(null);
- </script>
  </body>
+ 
+ <form method ="post">
+ 
+ <table border="2">
+ <tr><th>Edit</th><th>Delete</th><th>courseId</th><th>courseName</th><th>courseDescription</th><th>level</th><th>whoShouldDoThisCourse</th><th>prerequisites</th><th>skillsAcquired</th></tr>
+ 
+ 
+ 
+ <%
+ 
+ try
+  {
+	 Class.forName("com.mysql.jdbc.Driver");
+	 String url="jdbc:mysql://localhost:3306/paango";
+	  String user = "root";
+	  String psword = "123";
+	  Connection c=null;
+	  Statement s=null;
+	  ResultSet rs=null;
+	   c=DriverManager.getConnection(url,user,psword);
+	s =c.createStatement();
+	 String s1="select * from courses ";
+	 rs=s.executeQuery(s1);
+	 while(rs.next())
+	 {
+  %>
+	 	 <tr><td><a href="editCourse.jsp?id=<%=rs.getInt("id") %>">Edit</td> <td><a href="delete.jsp?id=<%=rs.getInt("id") %>">Delete</td><td><%=rs.getInt("id")%></td><td><%=rs.getString("course_name") %></td><td><%=rs.getString("course_description") %></td><td><%=rs.getString("level") %><td><%=rs.getString("who_should_do_this_course") %></td><td><%=rs.getString("prerequisites") %></td><td><%=rs.getString("skills_aquired") %></td></tr> 
+	<% 
+	 }
+	 rs.close();
+	 s.close();
+	 c.close();
+	 
+	 %>
+ </table>
+ 
+<%
+  }
+ catch(Exception e)
+ {
+	 e.printStackTrace();
+ }
+ finally
+ {
+	
+	 
+ }
+ %>
+ </form>
  </html>
