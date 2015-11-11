@@ -49,17 +49,18 @@ public class Courses extends HttpServlet {
 		
 		String s=(String)request.getParameter("type");
 		 
-		String x=request.getParameter("hidden");
+	//	String x=request.getParameter("hidden");
 	 switch(s)
 	 {
 	 case "A" :
 	 
-		             
+		  
+		 
 			  
 		CoursesDAO course=new CoursesDAO();
 		
 		//PrintWriter pw = response.getWriter();
-
+		course.setId(request.getParameter("cid"));
 		course.setCourseDescription(request.getParameter("cdesc"));
 		course.setCourseName(request.getParameter("cname"));
 		course.setLevel(request.getParameter("level"));
@@ -67,18 +68,19 @@ public class Courses extends HttpServlet {
 		course.setSkillsAcquired(request.getParameter("tarea3"));
 		course.setWhoShouldDoThisCourse(request.getParameter("tarea1"));
 		
-		course.insert("http://localhost:5984/courses");
+		course.insert("jdbc:mysql://localhost:3306/paango?autoReconnect=true");
 		
 		RequestDispatcher dispatcher=request.getRequestDispatcher("/index.jsp");
 		dispatcher.forward(request, response);
 	 
 		break;
 	 case "E" :
+		 
 			doPut(request, response);
 		
 	break;
 	 case "D" :
-		
+		 
 			 
 			doDelete(request, response);
 	 }
@@ -96,9 +98,12 @@ public class Courses extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 		try {
 			  
-				String s= course.getAllCourses();
-		  
-				pw.println(s);	
+	course.getAllCourses();
+	 
+	 
+	
+	
+				pw.println();	
 					
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -119,26 +124,26 @@ public class Courses extends HttpServlet {
  
 	 
 		
+		 
+		 
 		CoursesDAO course=new CoursesDAO();
+		
+		course.setId(request.getParameter("cid"));
 		course.setCourseDescription(request.getParameter("cdesc"));
 		course.setCourseName(request.getParameter("cname"));
 		course.setLevel(request.getParameter("level"));
 		course.setPrerequisites(request.getParameter("tarea2"));
 		course.setSkillsAcquired(request.getParameter("tarea3"));
 		course.setWhoShouldDoThisCourse(request.getParameter("tarea1"));
-		String s=request.getParameter("hidden");
-		String s1=request.getParameter("revision");
 	 
-		course.setId(s);
-		course.setRev(s1);
-		
-		course.update("http://localhost:5984/courses");
-		
+		course.update("jdbc:mysql://localhost:3306/paango?autoReconnect=true");
 		RequestDispatcher dispatcher=request.getRequestDispatcher("/index.jsp");
 		dispatcher.forward(request, response);
-	 
-		
 	}
+
+
+
+
 
 	/**
 	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
@@ -150,14 +155,13 @@ public class Courses extends HttpServlet {
 		
 		CoursesDAO course=new CoursesDAO();
 		String s=request.getParameter("hidden");
-		String s1=request.getParameter("revision");
-		course.setId(s);
-		course.setRev(s1);
 		
-		course.delete("http://localhost:5984/courses/"+s+"?rev="+s1);
+		course.setId(s);
+		 
+		
+		course.delete();
 		
 		RequestDispatcher dispatcher=request.getRequestDispatcher("/index.jsp");
 		dispatcher.forward(request, response);
 	}
-
 }
