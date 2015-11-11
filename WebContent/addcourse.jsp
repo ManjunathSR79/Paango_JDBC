@@ -17,6 +17,12 @@ color:red;
 
  <form name="addcourse" method="POST" action="Courses">
 
+
+<h1>Course Id<span>*</span>:</h1>
+<input  type="text" name="cid"  required>
+
+  <br>
+  
 <h1>Course Name<span>*</span>:</h1>
 <input  type="text" name="cname"  required>
 
@@ -47,7 +53,9 @@ color:red;
  <br />
   <br />
    <br>
- <input type="hidden" name="type" value="A">
+ 
+ 
+  <input type="hidden" name="type" value="A">
  <input type="submit" value="Add Course">
  
  
