@@ -68,8 +68,9 @@ color:red;
    <br>
  
  <input type="hidden" name="hidden" id="hidden"   />
-  
-  <input type="hidden" name="type" value="E">
+  <a href="http://localhost:8080/lms1/Courses?id=<%=request.getParameter("id")%>">Attached file</a>
+  <br/>
+  <input type="hidden" name="type1" value="E">
  <input type="submit" value="Update Course">
  
  
