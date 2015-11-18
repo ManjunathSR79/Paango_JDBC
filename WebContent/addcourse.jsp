@@ -15,7 +15,7 @@ color:red;
 </head>
 <body>
 
- <form name="addcourse" method="POST" action="Courses">
+ <form    method="post" action="Courses" enctype="multipart/form-data">
 
 
 <h1>Course Id<span>*</span>:</h1>
@@ -53,9 +53,10 @@ color:red;
  <br />
   <br />
    <br>
- 
- 
-  <input type="hidden" name="type" value="A">
+    
+ <input type="file" name="photo"  multiple="muliple"/>
+ <br>
+ <input type="hidden" name="type1" value="A">
  <input type="submit" value="Add Course">
  
  
