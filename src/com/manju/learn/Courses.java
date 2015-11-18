@@ -1,27 +1,40 @@
 package com.manju.learn;
  
+
  
 import com.paango.dao.CoursesDAO;
 
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.servlet.*;
-import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /** 
  * Servlet implementation class Courses
  */
 @WebServlet("/Courses")
+@MultipartConfig(maxFileSize = 21665)
+
 public class Courses extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	HttpServletResponse response;
@@ -30,6 +43,7 @@ public class Courses extends HttpServlet {
 	 */
 
 	public Courses() {
+		
  // TODO Auto-generated constructor stub
 	}
   
@@ -47,18 +61,18 @@ public class Courses extends HttpServlet {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
 		
-		String s=(String)request.getParameter("type");
-		 
-	//	String x=request.getParameter("hidden");
+		String s=(String)request.getParameter("type1");
+	System.out.println("type "+s);
+		 try
+		 {
 	 switch(s)
 	 {
 	 case "A" :
-	 
 		  
-		 
-			  
-		CoursesDAO course=new CoursesDAO();
 		
+		 Part filePart = request.getPart("photo");
+		CoursesDAO course=new CoursesDAO();
+		 
 		//PrintWriter pw = response.getWriter();
 		course.setId(request.getParameter("cid"));
 		course.setCourseDescription(request.getParameter("cdesc"));
@@ -69,6 +83,22 @@ public class Courses extends HttpServlet {
 		course.setWhoShouldDoThisCourse(request.getParameter("tarea1"));
 		
 		course.insert("jdbc:mysql://localhost:3306/paango?autoReconnect=true");
+		course.upload("jdbc:mysql://localhost:3306/paango?autoReconnect=true", filePart);
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+		
+	 
 		
 		RequestDispatcher dispatcher=request.getRequestDispatcher("/index.jsp");
 		dispatcher.forward(request, response);
@@ -82,8 +112,14 @@ public class Courses extends HttpServlet {
 	 case "D" :
 		 
 			 
-			doDelete(request, response);
+			doDelete(request, response); 
 	 }
+		 }
+		 
+		 catch(Exception e)
+		 {
+			 System.out.println("SWITCH    "+e);
+		 }
 	}
 	
 	 
@@ -93,24 +129,135 @@ public class Courses extends HttpServlet {
 		
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
- 
-		CoursesDAO course=new CoursesDAO();
-		PrintWriter pw = response.getWriter();
-		try {
-			  
-	course.getAllCourses();
+		InputStream inputStream = null; // input stream of the upload file
+        
+        // obtains the upload file part in this multipart request
+       
+      
+	 final String user = "root";
+	 final String psword = "123";
+			 
+Connection c=null; 
+Statement p = null;
+
 	 
 	 
-	
-	
-				pw.println();	
-					
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}}
+	 try {
+		Class.forName("com.mysql.jdbc.Driver");
+		 System.out.println("for namr");
+	} catch (ClassNotFoundException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	 
+	  try {
+		c=DriverManager.getConnection("jdbc:mysql://localhost:3306/paango?autoReconnect=true",user,psword);
+		 System.out.println("DM");
+		 } catch (SQLException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+   	 try {
+		p=c.createStatement();
+		 System.out.println("CS");
+	} catch (SQLException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+			
+			
+			
+			
+		String id=	"0";
+		id=request.getParameter("cid");
 		
+		if(id==null)
+		{
+			id=request.getParameter("id");
+		}
 		 
+   	String s1="select * from files where id="+id;
+	 
+	 
+		try {
+			ResultSet rs=p.executeQuery(s1);
+			 System.out.println("EQ");
+			if (rs.next()) {
+			        // gets file name and file blob data
+				 System.out.println("EQRS");
+			        Blob blob = rs.getBlob("file");
+			         inputStream = blob.getBinaryStream();
+			        int fileLength = inputStream.available();
+			         
+			        System.out.println("fileLength = " + fileLength);
+
+			         
+
+			        // sets MIME type for the file download
+			                     
+			        String mimeType = "text file";
+			        // set content properties and header attributes for the response
+			        response.setContentType(mimeType);
+			        response.setContentLength(fileLength);
+			        String headerKey = "Content-Disposition";
+			        String headerValue = String.format("attachment; filename=text file");
+			        response.setHeader(headerKey, headerValue);
+
+			        
+			     
+			        // writes the file to the client
+			        OutputStream outStream = response.getOutputStream();
+			        final int BUFFER_SIZE = 4096;
+			        byte[] buffer = new byte[BUFFER_SIZE];
+			        int bytesRead = -1;
+			         
+			        while ((bytesRead = inputStream.read(buffer)) != -1) {
+			            outStream.write(buffer, 0, bytesRead);
+			        }
+			         
+			        inputStream.close();
+			        outStream.close();             
+			    } else {
+			        // no file found
+			        response.getWriter().print("File not found for the id: " + request.getParameter("cid"));  
+			    }
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			 System.out.println("EQ     "+e1);
+			e1.printStackTrace();
+		}
+				
+			 
+				 try {
+					p.close();
+				
+					c.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+			 
+					e.printStackTrace();
+				}
+			 
+			
+		
+ 
+ 
+	
+	
+	
+	
+	
+	
+	
+	RequestDispatcher dispatcher=request.getRequestDispatcher("/index.jsp");
+	dispatcher.forward(request, response);
+ 
+		
+	
+	
+	}
+		
+	
 		
 		
 	/** 
