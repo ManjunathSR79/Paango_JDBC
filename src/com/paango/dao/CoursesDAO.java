@@ -1,34 +1,36 @@
 package com.paango.dao;
+  
  
-
+import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
-
-
-import java.sql.DriverManager;
-import java.sql.Statement;
-import java.sql.SQLException;
 import java.util.Map;
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.sun.corba.se.pept.transport.*;
-import com.sun.corba.se.pept.transport.*;
+import javax.servlet.http.Part;
 
-  
+import com.sun.corba.se.pept.transport.*;
+import com.sun.corba.se.pept.transport.*;
+@WebServlet("/CoursesDAO")
 public class CoursesDAO
 {
 	 
@@ -98,15 +100,27 @@ this.whoShouldDoThisCourse = whoShouldDoThisCourse;
 		 final String psword = "123";
 				 
 	Connection c=null; 
-	Statement p = null;
+	PreparedStatement statement=null;
 	 try {
+		 
 		 Class.forName("com.mysql.jdbc.Driver");
 		  int u=0;
 	     c=DriverManager.getConnection(url,user,psword);
-	   	 p=c.createStatement();
-		  String q="INSERT INTO courses VALUES('" + id+"','"+courseName+"','"+courseDescription+"','"+level+"','"+whoShouldDoThisCourse+"','"+prerequisites+"','"+skillsAcquired+"')";
-		 u=p.executeUpdate(q);
-		 if(u!=0)
+	     
+		  String q="INSERT INTO courses VALUES( ?,?,?,?,?,?,?)";
+		  statement = c.prepareStatement(q);
+		    
+		   statement.setString(1, id);
+		   statement.setString(2, courseName);
+		   statement.setString(3, courseDescription);
+		   statement.setString(4, level);
+		   statement.setString(5, whoShouldDoThisCourse);
+		   statement.setString(6, prerequisites);
+		   statement.setString(7, skillsAcquired);
+		  
+		   int row = statement.executeUpdate();
+		  
+		  if (row > 0) 
 		 {
 			 System.out.println("sucessfully added");
 		 }
@@ -119,7 +133,7 @@ this.whoShouldDoThisCourse = whoShouldDoThisCourse;
 	 finally
 	 {
 		 try {
-			p.close();
+			statement.close();
 		
 			c.close();
 		} catch (SQLException e) {
@@ -130,6 +144,83 @@ this.whoShouldDoThisCourse = whoShouldDoThisCourse;
 	 }
 	  
 	}
+	
+	
+	
+	public void upload(String url, Part filePart) throws MalformedURLException, IOException,
+	ProtocolException {
+		 InputStream inputStream = null; // input stream of the upload file
+         
+	        // obtains the upload file part in this multipart request
+	       
+	        if (filePart != null) {
+	        	
+	        	inputStream = filePart.getInputStream();
+	        }
+		 final String user = "root";
+		 final String psword = "123";
+				 
+	Connection c=null; 
+	PreparedStatement statement=null;
+	 try {
+		 
+		 
+		 Class.forName("com.mysql.jdbc.Driver");
+		 
+		  c=DriverManager.getConnection(url,user,psword);
+ 
+	   	 
+		  String q="INSERT INTO files VALUES(?, ?)";
+		  statement = c.prepareStatement(q);
+		  statement.setString(1, id);
+		  if (inputStream != null) {
+              // fetches input stream of the upload file for the blob column
+              statement.setBlob(2, inputStream);
+          }
+		 
+		  int row = statement.executeUpdate();
+		 
+          if (row > 0) {
+        	  System.out.println("File uploaded and saved into database");
+          }
+		  
+		  
+	 }
+	 catch(Exception e)
+	 {
+		 System.out.println(" unable to connect");
+		
+	 }
+	 finally
+	 {
+		 try {
+			statement.close();
+		
+			c.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	 
+			e.printStackTrace();
+		}
+	 }
+	  
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//private final static String USER_AGENT = "Mozilla/5.0";
 	 
@@ -151,8 +242,8 @@ this.whoShouldDoThisCourse = whoShouldDoThisCourse;
 	  c=DriverManager.getConnection(url,user,psword);
 	
 	 		 p=c.createStatement();
-	 		// String q="UPDATE courses "+ "SET "+"course_name ='aaaaaaa'  WHERE id=1";
-			String q="UPDATE courses "+ "SET course_name = '"+courseName+"',course_description ='"+courseDescription+"' ,level='"+level+"',who_should_do_this_course='"+whoShouldDoThisCourse+"',prerequisites='"+prerequisites+"',skills_aquired='"+skillsAcquired+"' WHERE id='" + id+"'" ;
+	 		 
+			String q="UPDATE courses SET course_name = '"+courseName+"',course_description ='"+courseDescription+"' ,level='"+level+"',who_should_do_this_course='"+whoShouldDoThisCourse+"',prerequisites='"+prerequisites+"',skills_aquired='"+skillsAcquired+"' WHERE id='" + id+"'" ;
 			 
 		
 							 
@@ -282,6 +373,22 @@ this.whoShouldDoThisCourse = whoShouldDoThisCourse;
 				    setSkillsAcquired(rs.getString("skills_aquired"));
 				    setWhoShouldDoThisCourse(rs.getString("who_should_do_this_course"));
 			 }
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
 			 }
 			 catch(Exception e)
 			 {
@@ -330,12 +437,16 @@ this.whoShouldDoThisCourse = whoShouldDoThisCourse;
 	 		 p=c.createStatement();
 	 		// String q="UPDATE courses "+ "SET "+"course_name ='aaaaaaa'  WHERE id=1";
 			//String q="DELETE FROM courses "+ "WHERE id='+id+'" ;
-	 		 
-	 		String q="DELETE FROM courses  WHERE id='" + id+"'" ;
+	 		String q="DELETE FROM files  WHERE id='" + id+"'" ; 
+			// p.executeUpdate(q);
+			 System.out.println("Status of delete from files "+p.executeUpdate(q));
+			 
+	 		 q="DELETE FROM courses  WHERE id='" + id+"'" ;
 			 
 			 		 
-			 p.executeUpdate(q);
-			 	 
+			// p.executeUpdate(q);
+			 System.out.println("Status of delete from courses "+p.executeUpdate(q));
+			   
 			
 	 }
 	 catch(Exception e)
