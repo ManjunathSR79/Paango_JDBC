@@ -22,7 +22,7 @@
 </form>
  </body>
  
- <form method ="get">
+ <form method ="post">
  
  <table border="2">
  <tr><th>Edit</th><th>Delete</th><th>courseId</th><th>courseName</th><th>courseDescription</th><th>level</th><th>whoShouldDoThisCourse</th><th>prerequisites</th><th>skillsAcquired</th><th>Files</th></tr>
