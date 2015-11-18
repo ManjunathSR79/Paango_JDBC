@@ -17,7 +17,7 @@ alert("If You Want To Delete It.");
 </script>
  
 <input type="hidden" name="hidden" id="hidden" value='<%=request.getParameter("id")%>' />
-  <input type="hidden" name="type" value="D">
+  <input type="hidden" name="type1" value="D">
   
   <input type="submit" value="Delete Course">
  
