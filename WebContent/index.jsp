@@ -22,10 +22,10 @@
 </form>
  </body>
  
- <form method ="post">
+ <form method ="get">
  
  <table border="2">
- <tr><th>Edit</th><th>Delete</th><th>courseId</th><th>courseName</th><th>courseDescription</th><th>level</th><th>whoShouldDoThisCourse</th><th>prerequisites</th><th>skillsAcquired</th></tr>
+ <tr><th>Edit</th><th>Delete</th><th>courseId</th><th>courseName</th><th>courseDescription</th><th>level</th><th>whoShouldDoThisCourse</th><th>prerequisites</th><th>skillsAcquired</th><th>Files</th></tr>
  
  
  
@@ -47,14 +47,14 @@
 	 while(rs.next())
 	 {
   %>
-	 	 <tr><td><a href="editCourse.jsp?id=<%=rs.getInt("id") %>">Edit</td> <td><a href="delete.jsp?id=<%=rs.getInt("id") %>">Delete</td><td><%=rs.getInt("id")%></td><td><%=rs.getString("course_name") %></td><td><%=rs.getString("course_description") %></td><td><%=rs.getString("level") %><td><%=rs.getString("who_should_do_this_course") %></td><td><%=rs.getString("prerequisites") %></td><td><%=rs.getString("skills_aquired") %></td></tr> 
+	 	 <tr><td><a href="editCourse.jsp?id=<%=rs.getInt("id") %>">Edit</td> <td><a href="delete.jsp?id=<%=rs.getInt("id") %>">Delete</td><td><%=rs.getInt("id")%></td><td><%=rs.getString("course_name") %></td><td><%=rs.getString("course_description") %></td><td><%=rs.getString("level") %><td><%=rs.getString("who_should_do_this_course") %></td><td><%=rs.getString("prerequisites") %></td><td><%=rs.getString("skills_aquired") %></td><td><a href="http://localhost:8080/lms1/Courses?id=<%=rs.getInt("id") %>">click</a></td></tr> 
 	<% 
 	 }
 	 rs.close();
 	 s.close();
 	 c.close();
-	 
 	 %>
+	 
  </table>
  
 <%
